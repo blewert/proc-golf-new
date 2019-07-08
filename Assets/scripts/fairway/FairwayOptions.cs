@@ -17,4 +17,11 @@ public class FairwayOptions
     public int circleFidelity = 16;
 
     public float holeScaleFactor = 1.5f;
+
+    [Range(0f, 2f)]
+    public float holeRadius = 0.6f;
+    public int holeSampleCount = 15;
+
+    [Range(0f, 1f)]
+    public float offsetRadius = 0.0f;
 }

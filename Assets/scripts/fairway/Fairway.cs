@@ -17,6 +17,8 @@ public class Fairway : CourseComponent
     public List<FairwayPoint> points = new List<FairwayPoint>();
     public List<Hull> hulls = new List<Hull>();
 
+    public Hull holeHull;
+
     public Fairway(Transform parent, FairwayOptions options) : base(parent)
     {
         //Set up options!
@@ -27,6 +29,46 @@ public class Fairway : CourseComponent
 
         //Generate hulls
         this.GenerateFairwayHulls();
+
+        //Generate hole hull
+        this.GenerateHole();
+    }
+
+    public override bool isPointInside(Vector3 point)
+    {
+        //Does any hull contain this point?
+        return hulls.Any(x => x.ContainsPoint(point));
+    }
+
+    public bool isPointInsideHole(Vector3 point)
+    {
+        //Does it contain a point?
+        return holeHull.ContainsPoint(point);
+    }
+
+    private void GenerateHole()
+    {
+        //Find the last point
+        var lastPoint = points.Last();
+
+        //Choose n random points around this point
+        var samplePoints = new List<Vector3>();
+
+        //Find offset point
+        var offset = MathfEx.OffsetPointByAngleXZ(Vector3.zero, Random.value * 360f, options.offsetRadius * lastPoint.radius, transform.rotation);
+
+        for(int i = 0; i < options.holeSampleCount; i++)
+        {
+            //Choose angle and distance
+            float randAngle = Random.Range(0f, Mathf.PI * 2);
+            float randDistance = Random.Range(0f, options.holeScaleFactor * (lastPoint.radius / 2f));
+
+            //Add this point
+            samplePoints.Add(MathfEx.OffsetPointByAngleXZ(offset + lastPoint.position, randAngle, randDistance, transform.rotation, true));
+        }
+
+        //Find the convex hull of these points
+        holeHull = new Hull(samplePoints);
     }
 
     private void GenerateFairwayHulls()
@@ -98,7 +140,12 @@ public class Fairway : CourseComponent
             
         }
 
+        Gizmos.color = Color.white;
+
         foreach(var hull in hulls)
-            GizmosEx.DrawPolygon(hull.points);            
+            GizmosEx.DrawPolygon(hull.points);        
+
+        Gizmos.color = Color.yellow;    
+        GizmosEx.DrawPolygon(holeHull.points);
     }
 }

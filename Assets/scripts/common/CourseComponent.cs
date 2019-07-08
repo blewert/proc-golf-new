@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CourseComponent
+public abstract class CourseComponent
 {
     protected Transform transform;
 
@@ -10,6 +10,8 @@ public class CourseComponent
     {
         get { return transform.position; }
     }
+
+    public abstract bool isPointInside(Vector3 point);
 
     public CourseComponent(Transform transform)
     {

@@ -17,8 +17,19 @@ public class Hull
         points = ConvexHull.Compute(allPoints, true);
     }
 
+    public Hull(List<Vector3> points)
+    {
+        //Make a new convex hull
+        this.points = ConvexHull.Compute(points, true);
+    }
+
     public void Add(Vector3 point)
     {
         this.points.Add(point);
+    }
+
+    public bool ContainsPoint(Vector3 point)
+    {
+        return MathfEx.PolyContainsPoint(points.Select(x => new Vector2(x.x, x.z)).ToList(), new Vector2(point.x, point.z));
     }
 }
