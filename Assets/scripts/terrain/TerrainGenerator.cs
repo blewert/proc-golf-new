@@ -8,15 +8,36 @@ using EPPZ.Geometry.Model;
 public class TerrainGenerator
 {
     public SplatmapOptions splatOptions;
+    public TreeOptions treeOptions;
     public Terrain terrain;
 
-    public TerrainGenerator(Terrain terrain, SplatmapOptions splatOptions)
+    public TerrainGenerator(Terrain terrain, SplatmapOptions splatOptions, TreeOptions treeOptions)
     {
         this.splatOptions = splatOptions;
+        this.treeOptions = treeOptions;
         this.terrain = terrain;
     }
 
-    public void setSplatmaps(Fairway fairway, Terrain terrain, SplatmapOptions options)
+    public void spawnTrees(Fairway fairway)
+    {
+        for(int i = 0; i < treeOptions.numberOfTrees; i++)
+        {
+            var pos = MathfEx.RandomPointOnTerrain(terrain);
+            
+            if(fairway.isPointInside(pos))
+                continue;
+
+            var randPrefab = treeOptions.randomTreePrefab;
+
+            Quaternion rot = Quaternion.identity * Quaternion.Euler(0, Random.value * 360, 0);
+            
+            var obj = GameObject.Instantiate(randPrefab, pos, rot);
+
+            obj.transform.localScale = Vector3.one * (1f + Random.Range(-treeOptions.treeScaleVariance, treeOptions.treeScaleVariance));
+        }
+    }
+
+    public void setMaps(Fairway fairway, Terrain terrain)
     {
         //Alias for terrain data
         TerrainData tdata = terrain.terrainData;
@@ -30,6 +51,9 @@ public class TerrainGenerator
         //Outside = 0 (rough)
         //Inside = 1 (green)
         //Inside, last node = 2 (green hole)
+
+        //Array for detail maps, get the first layer
+        var detailLayer = new int[tdata.detailWidth, tdata.detailHeight];
 
         //Get the maps
         float[,,] maps = new float[tdata.alphamapWidth, tdata.alphamapHeight, 3];
@@ -58,9 +82,15 @@ public class TerrainGenerator
                     maps[y, x, 1] = 1.0f;
 
                 else
+                {
                     maps[y, x, 0] = 1.0f;
+                    detailLayer[y, x] = splatOptions.densityPerPixel;
+                }
             }
         }
+
+        //Set the detail layer map
+        tdata.SetDetailLayer(0, 0, 0, detailLayer);
 
         //And set the alphamaps
         tdata.SetAlphamaps(0, 0, maps);

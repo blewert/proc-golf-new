@@ -10,6 +10,20 @@ using System.Linq;
 
 public static partial class MathfEx
 {
+    public static Vector3 RandomPointOnTerrain(Terrain terrain = default(Terrain))
+    {
+        if(terrain == default(Terrain))
+            terrain = Terrain.activeTerrain;
+
+        var randPoint = new Vector3(Random.value, 0, Random.value);
+        
+        randPoint.Scale(terrain.terrainData.size);
+
+        randPoint.y = terrain.SampleHeight(randPoint);
+
+        return randPoint;
+    }
+
     public static Vector3 Polar2CartXZ(float angle, float distance, Quaternion orientation, bool radians = false)
     {
         //Multiplier for changing angle modes

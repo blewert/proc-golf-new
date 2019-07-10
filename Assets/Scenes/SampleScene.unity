@@ -313,13 +313,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.56775695, y: -0.20938899, z: 0.15213, w: 0.78145045}
+  m_LocalRotation: {x: 0.45421872, y: 0.22841759, z: -0.12170756, w: 0.8524659}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 72, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 56.1, y: 30, z: 0}
 --- !u!1 &877422883
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b8916a954f4a5408b7a3f8c469bb0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: -1
+  seed: 5
   fairwayOptions:
     minRadius: 2
     maxRadius: 4
@@ -537,6 +537,15 @@ MonoBehaviour:
     holeSampleCount: 50
     offsetRadius: 0.526
   terrain: {fileID: 877422885}
+  splatOptions:
+    densityPerPixel: 15
+  treeOptions:
+    numberOfTrees: 1500
+    treePrefabs:
+    - {fileID: 100000, guid: d7ebb2b5789a2be45b7bd26b3b9d50aa, type: 3}
+    - {fileID: 100000, guid: 23062208c1e1ace4d9e5270be8b68dcb, type: 3}
+    - {fileID: 100000, guid: 78fdf95c4c2d7384a8957ee310d2b067, type: 3}
+    treeScaleVariance: 0.3
   sample: {fileID: 1868640943}
 --- !u!135 &1319210894
 SphereCollider:

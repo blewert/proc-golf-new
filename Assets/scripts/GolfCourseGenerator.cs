@@ -19,6 +19,7 @@ public class GolfCourseGenerator : MonoBehaviour
     public Terrain terrain;
     public TerrainGenerator terrainGenerator;
     public SplatmapOptions splatOptions;
+    public TreeOptions treeOptions;
 
     /// <summary>
     /// When the game runs, generate the course
@@ -40,8 +41,11 @@ public class GolfCourseGenerator : MonoBehaviour
         fairway = new Fairway(transform, fairwayOptions);
 
         //Generate the terrain
-        terrainGenerator = new TerrainGenerator(terrain, splatOptions);
-        terrainGenerator.setSplatmaps(fairway, terrain, splatOptions);
+        terrainGenerator = new TerrainGenerator(terrain, splatOptions, treeOptions);
+        terrainGenerator.setMaps(fairway, terrain);
+
+        //Now spawn the trees
+        terrainGenerator.spawnTrees(fairway);
 
         //Return it
         RNGStateManager.Pop();
@@ -51,13 +55,7 @@ public class GolfCourseGenerator : MonoBehaviour
 
     void Update()
     {
-        foreach(var hull in fairway.hulls)
-        {
-            var points = hull.points.Select(x => new Vector2(x.x, x.z)).ToList();
 
-            if(MathfEx.PolyContainsPoint(points, new Vector2(sample.position.x, sample.position.z)))
-                Debug.Log("yep");
-        }
     }
 
     void OnDrawGizmos()
