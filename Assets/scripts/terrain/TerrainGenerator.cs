@@ -23,14 +23,14 @@ public class TerrainGenerator
         for(int i = 0; i < treeOptions.numberOfTrees; i++)
         {
             var pos = MathfEx.RandomPointOnTerrain(terrain);
-            
-            if(fairway.isPointInside(pos))
+
+            if (fairway.isPointInsideOuterHull(pos))
                 continue;
 
             var randPrefab = treeOptions.randomTreePrefab;
 
             Quaternion rot = Quaternion.identity * Quaternion.Euler(0, Random.value * 360, 0);
-            
+
             var obj = GameObject.Instantiate(randPrefab, pos, rot);
 
             obj.transform.localScale = Vector3.one * (1f + Random.Range(-treeOptions.treeScaleVariance, treeOptions.treeScaleVariance));
@@ -84,7 +84,11 @@ public class TerrainGenerator
                 else
                 {
                     maps[y, x, 0] = 1.0f;
-                    detailLayer[y, x] = splatOptions.densityPerPixel;
+
+                    if(!fairway.isPointInsideOuterHull(point))
+                        detailLayer[y, x] = splatOptions.densityPerPixel;
+                    // else
+                    //     detailLayer[y, x] = 1;
                 }
             }
         }

@@ -532,10 +532,11 @@ MonoBehaviour:
     distance: 4.01
     angleRange: 26.07
     circleFidelity: 32
-    holeScaleFactor: 1.5
+    holeScaleFactor: 2.31
     holeRadius: 1.26
     holeSampleCount: 50
     offsetRadius: 0.526
+    outerHullOffset: 0.338
   terrain: {fileID: 877422885}
   splatOptions:
     densityPerPixel: 15

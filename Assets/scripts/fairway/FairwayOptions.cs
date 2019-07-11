@@ -24,4 +24,7 @@ public class FairwayOptions
 
     [Range(0f, 1f)]
     public float offsetRadius = 0.0f;
+
+    [Range(0f, 1f)]
+    public float outerHullOffset = 0.2f;
 }

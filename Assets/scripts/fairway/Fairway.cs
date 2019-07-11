@@ -16,6 +16,7 @@ public class Fairway : CourseComponent
 
     public List<FairwayPoint> points = new List<FairwayPoint>();
     public List<Hull> hulls = new List<Hull>();
+    public List<Hull> outerHulls = new List<Hull>();
 
     public Hull holeHull;
 
@@ -36,8 +37,14 @@ public class Fairway : CourseComponent
 
     public override bool isPointInside(Vector3 point)
     {
+
         //Does any hull contain this point?
         return hulls.Any(x => x.ContainsPoint(point));
+    }
+
+    public bool isPointInsideOuterHull(Vector3 point)
+    {
+        return outerHulls.Any(x => x.ContainsPoint(point));
     }
 
     public bool isPointInsideHole(Vector3 point)
@@ -73,15 +80,35 @@ public class Fairway : CourseComponent
 
     private void GenerateFairwayHulls()
     {
-        for(int i = 1; i < points.Count; i++)
+        for (int i = 1; i < points.Count; i++)
         {
-            FairwayPoint prev = points[i-1];
+            FairwayPoint prev = points[i - 1];
             FairwayPoint next = points[i];
 
             var prevPoints = MathfEx.CircleCoordinatesXZ(prev.position, prev.radius, transform.rotation, options.circleFidelity);
             var nextPoints = MathfEx.CircleCoordinatesXZ(next.position, next.radius, transform.rotation, options.circleFidelity);
 
             hulls.Add(new Hull(prevPoints, nextPoints));
+        }
+
+        this.GenerateFairwayOuterHulls();
+    }
+
+    private void GenerateFairwayOuterHulls()
+    {
+        for (int i = 1; i < points.Count; i++)
+        {
+            FairwayPoint prev = points[i - 1];
+            FairwayPoint next = points[i];
+
+            //Calculate outer hull radii
+            float pR = prev.radius + (prev.radius * options.outerHullOffset);
+            float nR = next.radius + (prev.radius * options.outerHullOffset);
+
+            var prevPoints = MathfEx.CircleCoordinatesXZ(prev.position, pR, transform.rotation, options.circleFidelity);
+            var nextPoints = MathfEx.CircleCoordinatesXZ(next.position, nR, transform.rotation, options.circleFidelity);
+
+            outerHulls.Add(new Hull(prevPoints, nextPoints));
         }
     }
 
