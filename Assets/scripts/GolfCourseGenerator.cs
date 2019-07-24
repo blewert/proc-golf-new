@@ -21,12 +21,32 @@ public class GolfCourseGenerator : MonoBehaviour
     public SplatmapOptions splatOptions;
     public TreeOptions treeOptions;
 
+    public Transform player;
+
     /// <summary>
     /// When the game runs, generate the course
     /// </summary>
     void Start()
     {
         this.GenerateCourse();
+
+        this.SetupPlayer();
+    }
+
+    private void SetupPlayer()
+    {
+        //Is the player set in the inspector?
+        if(player == null)
+            throw new UnityException("Player object not set in the inspector");
+
+
+        var playerPos = fairway.playerPosition + Vector3.up * player.GetComponent<CharacterController>().height;
+
+        //Set their position
+        player.position = playerPos;
+
+        //And look towards the flag
+        player.LookAt(fairway.flagPosition);
     }
 
     /// <summary>

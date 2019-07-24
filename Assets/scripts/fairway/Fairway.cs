@@ -20,6 +20,11 @@ public class Fairway : CourseComponent
 
     public Hull holeHull;
 
+    public Vector3 flagPosition;
+    private GameObject flagObject;
+
+    public Vector3 playerPosition;
+
     public Fairway(Transform parent, FairwayOptions options) : base(parent)
     {
         //Set up options!
@@ -76,6 +81,43 @@ public class Fairway : CourseComponent
 
         //Find the convex hull of these points
         holeHull = new Hull(samplePoints);
+
+        //Spawn the flag
+        this.SpawnFlag();
+
+        //Generate player position
+        playerPosition = this.GeneratePlayerPosition();
+    }
+
+    private Vector3 GeneratePlayerPosition()
+    {
+        //Find the centroid of the first hull by just averaging it
+        Vector3 centroid = hulls[0].points.Aggregate((x, y) => x + y) / hulls[0].points.Count;
+
+        //Just return it
+        return centroid;
+    }
+
+    private void SpawnFlag()
+    {
+        //Is the flag prefab null?
+        if(options.flagPrefab == null)
+            throw new UnityException("No flag prefab set in the inspector!");
+
+        //First, generate the flag position
+        this.flagPosition = this.GenerateFlagPosition();
+
+        //Spawn the flag here
+        this.flagObject = GameObject.Instantiate(options.flagPrefab, this.flagPosition, Quaternion.identity);
+    }
+
+    private Vector3 GenerateFlagPosition()
+    {
+        //Find the centroid of the hull by just averaging it
+        Vector3 centroid = holeHull.points.Aggregate((x, y) => x + y) / holeHull.points.Count; 
+
+        //Return it
+        return centroid;
     }
 
     private void GenerateFairwayHulls()

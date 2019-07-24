@@ -27,4 +27,6 @@ public class FairwayOptions
 
     [Range(0f, 1f)]
     public float outerHullOffset = 0.2f;
+
+    public GameObject flagPrefab;
 }
