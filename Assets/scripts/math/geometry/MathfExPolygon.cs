@@ -19,4 +19,10 @@ public partial class MathfEx
         }
         return inside;
     }
+
+
+    public static List<Vector3> smoothPolygon(List<Vector3> points, int iterations = 3)
+    {
+        return Interpolate.NewCatmullRom(points.ToArray(), iterations, false).ToList();
+    }
 }

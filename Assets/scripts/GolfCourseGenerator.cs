@@ -141,7 +141,7 @@ public class GolfCourseGenerator : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        //if(fairway != null)
+        // if(fairway != null)
         //    fairway.DrawGizmos();
 
         if(sandtraps != null)

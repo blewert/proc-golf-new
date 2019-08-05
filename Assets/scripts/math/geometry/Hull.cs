@@ -14,13 +14,17 @@ public class Hull
         List<Vector3> allPoints = pointsA.Union(pointsB).ToList();
 
         //Compute the hull and save it
-        points = ConvexHull.Compute(allPoints, true);
+        this.points = ConvexHull.Compute(allPoints, true);
+
+        this.points = MathfEx.smoothPolygon(this.points);
     }
 
     public Hull(List<Vector3> points)
     {
         //Make a new convex hull
         this.points = ConvexHull.Compute(points, true);
+
+        this.points = MathfEx.smoothPolygon(this.points);
     }
 
     public void Add(Vector3 point)

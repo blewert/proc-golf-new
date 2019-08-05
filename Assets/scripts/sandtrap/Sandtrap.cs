@@ -57,5 +57,10 @@ public class Sandtrap : CourseComponent
     {
         // GizmosEx.DrawCircle(centroid, radius, Vector3.up);
         GizmosEx.DrawPolygon(hull.points);
+
+        // foreach(var point in hull.points)
+            // Gizmos.DrawSphere(point, 0.2f);
+
+        
     }
 }
