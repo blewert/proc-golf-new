@@ -723,6 +723,13 @@ MonoBehaviour:
     outerHullOffset: 0.338
     flagPrefab: {fileID: 8249525220143324086, guid: f94ecf8da65282641a6418a4467d5e24,
       type: 3}
+  sandtrapOptions:
+    maxSandtrapCount: 3
+    minSandtrapCount: 1
+    minRadiusDist: 1
+    minRadius: 1
+    maxRadius: 3
+    hullPoints: 10
   terrain: {fileID: 877422885}
   splatOptions:
     densityPerPixel: 15
@@ -734,7 +741,6 @@ MonoBehaviour:
     - {fileID: 100000, guid: 78fdf95c4c2d7384a8957ee310d2b067, type: 3}
     treeScaleVariance: 0.3
   player: {fileID: 805020198}
-  sample: {fileID: 1868640943}
 --- !u!135 &1319210894
 SphereCollider:
   m_ObjectHideFlags: 0
