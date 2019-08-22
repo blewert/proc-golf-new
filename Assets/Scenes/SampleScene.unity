@@ -730,6 +730,7 @@ MonoBehaviour:
     minRadius: 1
     maxRadius: 3
     hullPoints: 10
+    sinkDepth: 0.025
   terrain: {fileID: 877422885}
   splatOptions:
     densityPerPixel: 15

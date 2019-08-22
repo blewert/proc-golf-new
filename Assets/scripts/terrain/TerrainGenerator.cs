@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 using EPPZ.Geometry;
 using EPPZ.Geometry.Model;
@@ -37,7 +38,7 @@ public class TerrainGenerator
         }
     }
 
-    public void setMaps(Fairway fairway, Terrain terrain)
+    public void setMaps(List<Sandtrap> sandtraps, Fairway fairway, Terrain terrain)
     {
         //Alias for terrain data
         TerrainData tdata = terrain.terrainData;
@@ -51,12 +52,16 @@ public class TerrainGenerator
         //Outside = 0 (rough)
         //Inside = 1 (green)
         //Inside, last node = 2 (green hole)
+        //Inside, sandtrap = 3  (sandtrap)
+
+        //Array for height map
+        var heightMap = tdata.GetHeights(0, 0, tdata.heightmapResolution, tdata.heightmapResolution);
 
         //Array for detail maps, get the first layer
         var detailLayer = new int[tdata.detailWidth, tdata.detailHeight];
 
         //Get the maps
-        float[,,] maps = new float[tdata.alphamapWidth, tdata.alphamapHeight, 3];
+        float[,,] maps = new float[tdata.alphamapWidth, tdata.alphamapHeight, 4];
 
         for(int y = 0; y < terrainDetailSize; y++)
         {
@@ -75,12 +80,28 @@ public class TerrainGenerator
                 var point = new Vector3(nx, 0, ny);
 
                 //Running through each (x, y) in the detail map
-                if(fairway.isPointInsideHole(point))
+                //..
+
+                heightMap[y, x] = sandtraps[0].options.sinkDepth;
+
+                //Is it inside a sandtrap?
+                if (sandtraps.Any(s => s.isPointInside(point)))
+                {
+                    maps[y, x, 3] = 1.0f;
+
+                    //Make it a bit lower
+                    heightMap[y, x] -= sandtraps[0].options.sinkDepth;
+                }
+
+                //Is the point inside the hole?
+                else if(fairway.isPointInsideHole(point))
                     maps[y, x, 2] = 1.0f;
 
+                //Otherwise, is it inside the fairway?
                 else if(fairway.isPointInside(point))
                     maps[y, x, 1] = 1.0f;
 
+                //It's not in the hole, fairway or sandtraps
                 else
                 {
                     maps[y, x, 0] = 1.0f;
@@ -95,6 +116,9 @@ public class TerrainGenerator
 
         //Set the detail layer map
         tdata.SetDetailLayer(0, 0, 0, detailLayer);
+
+        //Set the heightmap
+        tdata.SetHeights(0, 0, heightMap);
 
         //And set the alphamaps
         tdata.SetAlphamaps(0, 0, maps);

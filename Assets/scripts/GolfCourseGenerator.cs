@@ -68,7 +68,10 @@ public class GolfCourseGenerator : MonoBehaviour
 
         //Generate the terrain
         terrainGenerator = new TerrainGenerator(terrain, splatOptions, treeOptions);
-        terrainGenerator.setMaps(fairway, terrain);
+        terrainGenerator.setMaps(sandtraps, fairway, terrain);
+
+        //Move the flag up a bit
+        fairway.flagObject.transform.Translate(Vector3.up * sandtrapOptions.sinkDepth * terrain.terrainData.size.y);
 
         //Now spawn the trees
         terrainGenerator.spawnTrees(fairway);

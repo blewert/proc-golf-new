@@ -16,4 +16,7 @@ public class SandtrapOptions
     public float maxRadius = 1f;
 
     public int hullPoints = 10;
+
+    [Range(0f, 1f)]
+    public float sinkDepth = 0.05f;
 }

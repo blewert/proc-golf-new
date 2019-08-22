@@ -21,7 +21,7 @@ public class Fairway : CourseComponent
     public Hull holeHull;
 
     public Vector3 flagPosition;
-    private GameObject flagObject;
+    public GameObject flagObject;
 
     public Vector3 playerPosition;
 
